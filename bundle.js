@@ -92916,7 +92916,7 @@ const { api } = client;
   client.gjp = "dummy";
   client.mustLogin = false;
 
-  const response = await fetch('https://gistcdn.githack.com/linxxrtv-ysinzz/e7c9fb73f546d05646fe9752d088bc88/raw/cb8c5b33aa5be1f1d5e802202d0755086ca5d006/toplist.json');
+  const response = await fetch('https://gist.githubusercontent.com/linxxrtv-ysinzz/e7c9fb73f546d05646fe9752d088bc88/raw');
   const data = await response.json();
 
   let total = 0;
@@ -92928,7 +92928,8 @@ const { api } = client;
     totalDemonlist = totalDemonlist + 1;
 
     // level
-    const CLevel = await client.api.levels.getById({ levelID: element });
+    const CLevelId = element['id'];
+    const CLevel = await client.api.levels.getById({ levelID: CLevelId });
     const CDescription = CLevel['desc'];
     const CTitle = CLevel['name'];
     const CUserId = CLevel['creatorUserID'];
@@ -92974,7 +92975,7 @@ const { api } = client;
                             </div>
                         </td>
                         <td><span class="difficulty difficulty-${difficultyClass}">${difficultyName}</span></td>
-                        <td><a href="#" class="video-btn">▶ На YouTube</a></td>
+                        <td><a href="${element['youtube']}" class="video-btn">▶ На YouTube</a></td>
                         <td class="points">${CDownloads.toString()}</td>`;
     list.appendChild(tr);
   };
