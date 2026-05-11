@@ -92916,69 +92916,79 @@ const { api } = client;
   client.gjp = "dummy";
   client.mustLogin = false;
 
-  const response = await fetch('https://gist.githubusercontent.com/linxxrtv-ysinzz/e7c9fb73f546d05646fe9752d088bc88/raw');
+  const response = await fetch('https://demo.opengist.io/ysinzz/3044ab01526043dc86066b7ee888c79b/raw/HEAD/toplist.json');
   const data = await response.json();
 
   let total = 0;
   let totalDemonlist = 0;
   let totalDownloads = 0;
-  console.log(data['categories']['_']['levels']);
-  for (const element of data['categories']['_']['levels']) {
-    total = total + 1;
-    totalDemonlist = totalDemonlist + 1;
 
-    // level
-    const CLevelId = element['id'];
-    const CLevel = await client.api.levels.getById({ levelID: CLevelId });
-    const CDescription = CLevel['desc'];
-    const CTitle = CLevel['name'];
-    const CUserId = CLevel['creatorUserID'];
-    const CDemonDifficulty = CLevel['demonDiff'];
-    const CDownloads = CLevel['downloads'];
+  const currentList = document.getElementById('api-curlist').textContent;
 
-    totalDownloads = totalDownloads + CDownloads;
+  for (const category of data['categories']) {
+    if (category['id'] != currentList) { continue; }
 
-    // user
-    const CUser = await client.api.users.getById(CUserId);
-    const CUserNick = CUser['nick'];
+    console.log(category['levels']);
+    for (const element of category['levels']) {
+      total = total + 1;
+      totalDemonlist = totalDemonlist + 1;
 
-    await console.log(CLevel);
-    await console.log(CUser);
+      // level
+      const CLevelId = element['id'];
+      const CLevel_Title = element['title'];
+      const CLevel_Author = element['author'];
+      let CLevel = {"name": CLevel_Title, "demonDiff": 0, "downloads": -1};
+      let CUser = {"nick": CLevel_Author};
+      if (CLevelId !== undefined && CLevelId !== null) {
+        CLevel = await client.api.levels.getById({ levelID: CLevelId })
+        CUser = await client.api.users.getById(CLevel['creatorUserID']);
+      }
+      const CUserNick = CUser['nick'];
+      const CTitle = CLevel['name'];
+      const CDemonDifficulty = CLevel['demonDiff'];
+      const CDownloads = CLevel['downloads'];
 
-    // adding
-    let list = document.getElementById('api-list');
-    let tr = document.createElement('tr');
-    let difficultyClass = 'na';
-    let difficultyName = "N/A";
-    let difficultyEmoji = "⚪";
+      totalDownloads = totalDownloads + CDownloads;
 
-    if (CDemonDifficulty == 2) {
-      difficultyClass = 'easy'; difficultyName = "Изи Демон"; difficultyEmoji = "🟢";
-    } else if (CDemonDifficulty == 3) {
-      difficultyClass = 'medium'; difficultyName = "Медиум Демон"; difficultyEmoji = "🟡";
-    } else if (CDemonDifficulty == 4) {
-      difficultyClass = 'hard'; difficultyName = "Хард Демон"; difficultyEmoji = "🟠";
-    } else if (CDemonDifficulty == 5) {
-      difficultyClass = 'insane'; difficultyName = "Инсейн Демон"; difficultyEmoji = "🔴";
-    } else if (CDemonDifficulty == 6) {
-      difficultyClass = 'extreme'; difficultyName = "Экстрим Демон"; difficultyEmoji = "🟣";
-    }
+      await console.log(CLevel);
+      await console.log(CUser);
 
-    tr.innerHTML = `<td class="rank">#${total.toString()}</td>
-                        <td>
-                            <div class="level-info">
-                                <div class="level-icon">${difficultyEmoji}</div>
-                                <div>
-                                    <div class="level-name">${CTitle} (${CLevelId.toString()})</div>
-                                    <div class="level-creator">${CUserNick}</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td><span class="difficulty difficulty-${difficultyClass}">${difficultyName}</span></td>
-                        <td><a href="${element['youtube']}" class="video-btn">▶ На YouTube</a></td>
-                        <td class="points">${CDownloads.toString()}</td>`;
-    list.appendChild(tr);
-  };
+      // adding
+      let list = document.getElementById('api-list');
+      let tr = document.createElement('tr');
+      let difficultyClass = 'na';
+      let difficultyName = "N/A";
+      let difficultyEmoji = "⚪";
+
+      if (CDemonDifficulty == 2) {
+        difficultyClass = 'easy'; difficultyName = "Изи Демон"; difficultyEmoji = "🟢";
+      } else if (CDemonDifficulty == 3) {
+        difficultyClass = 'medium'; difficultyName = "Медиум Демон"; difficultyEmoji = "🟡";
+      } else if (CDemonDifficulty == 4) {
+        difficultyClass = 'hard'; difficultyName = "Хард Демон"; difficultyEmoji = "🟠";
+      } else if (CDemonDifficulty == 5) {
+        difficultyClass = 'insane'; difficultyName = "Инсейн Демон"; difficultyEmoji = "🔴";
+      } else if (CDemonDifficulty == 6) {
+        difficultyClass = 'extreme'; difficultyName = "Экстрим Демон"; difficultyEmoji = "🟣";
+      }
+
+      const totalTitle = (CLevelId === undefined) ? CTitle : `${CTitle} (${CLevelId.toString()})`;
+      tr.innerHTML = `<td class="rank">#${total.toString()}</td>
+                          <td>
+                              <div class="level-info">
+                                  <div class="level-icon">${difficultyEmoji}</div>
+                                  <div>
+                                      <div class="level-name">${totalTitle}</div>
+                                      <div class="level-creator">${CUserNick}</div>
+                                  </div>
+                              </div>
+                          </td>
+                          <td><span class="difficulty difficulty-${difficultyClass}">${difficultyName}</span></td>
+                          <td><a href="${element['youtube']}" class="video-btn">▶ На YouTube</a></td>
+                          <td class="points">${CDownloads.toString()}</td>`;
+      list.appendChild(tr);
+    };
+  }
 
   // api
   document.getElementById('api-stat-total').textContent = total.toString();
