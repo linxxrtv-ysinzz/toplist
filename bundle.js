@@ -92969,7 +92969,7 @@ const { api } = client;
                             <div class="level-info">
                                 <div class="level-icon">${difficultyEmoji}</div>
                                 <div>
-                                    <div class="level-name">${CTitle}</div>
+                                    <div class="level-name">${CTitle} (${CLevelId.toString()})</div>
                                     <div class="level-creator">${CUserNick}</div>
                                 </div>
                             </div>
