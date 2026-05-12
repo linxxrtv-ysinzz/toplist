@@ -92937,7 +92937,8 @@ const { api } = client;
       const CLevelId = element['id'];
       const CLevel_Title = element['title'];
       const CLevel_Author = element['author'];
-      let CLevel = {"name": CLevel_Title, "demonDiff": 0, "downloads": -1};
+      const CLevel_Difficulty = element['diff'];
+      let CLevel = {"name": CLevel_Title, "demonDiff": CLevel_Difficulty, "downloads": -1, "likes": -1};
       let CUser = {"nick": CLevel_Author};
       if (CLevelId !== undefined && CLevelId !== null) {
         CLevel = await client.api.levels.getById({ levelID: CLevelId })
@@ -92947,6 +92948,7 @@ const { api } = client;
       const CTitle = CLevel['name'];
       const CDemonDifficulty = CLevel['demonDiff'];
       const CDownloads = CLevel['downloads'];
+      const CLikes = CLevel['likes'];
 
       totalDownloads = totalDownloads + CDownloads;
 
@@ -92972,20 +92974,22 @@ const { api } = client;
         difficultyClass = 'extreme'; difficultyName = "Экстрим Демон"; difficultyEmoji = "🟣";
       }
 
-      const totalTitle = (CLevelId === undefined) ? CTitle : `${CTitle} (${CLevelId.toString()})`;
+      const totalId = (CLevelId === undefined) ? 'N/A' : CLevelId.toString();
+      const totalIdId = (CLevelId === undefined) ? -1 : CLevelId;
       tr.innerHTML = `<td class="rank">#${total.toString()}</td>
                           <td>
                               <div class="level-info">
                                   <div class="level-icon">${difficultyEmoji}</div>
                                   <div>
-                                      <div class="level-name">${totalTitle}</div>
+                                      <div class="level-name">${CTitle}</div>
                                       <div class="level-creator">${CUserNick}</div>
                                   </div>
                               </div>
                           </td>
                           <td><span class="difficulty difficulty-${difficultyClass}">${difficultyName}</span></td>
                           <td><a href="${element['youtube']}" class="video-btn">▶ На YouTube</a></td>
-                          <td class="points">${CDownloads.toString()}</td>`;
+                          <td><button onclick="copyId(this, ${totalIdId})" class="id-btn">${totalId}</button></td>
+                          <td class="points">${CDownloads.toString()} / ${CLikes.toString()}</td>`;~
       list.appendChild(tr);
     };
   }

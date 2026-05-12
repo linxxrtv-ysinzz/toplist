@@ -7,23 +7,23 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div style="display: none;" id="api-curlist">_</div>
+    <div style="display: none;" id="api-curlist"></div>
 
     <!-- Header -->
     <header class="header">
         <div class="container">
             <div class="header-content">
                 <div class="logo">
-                    <h1>Демонлист</h1>
+                    <h1 id="title">Демонлист</h1>
                     <p>Система листов на сервере SwapGDPS</p>
                 </div>
                 <div class="nav">
                     <!-- <a href="#">Главная</a> -->
-                    <a href="#" class="nav-active">Демонлист</a>
-                    <a href="challenge.html">Челлендж лист</a>
-                    <a href="future.html">Будущий лист</a>
-                    <a href="send.html">Отправить</a>
-                    <a href="rules.html">Правила</a>
+                    <a id="btn-demonlist" href="?page=demonlist">Демонлист</a>
+                    <a id="btn-challenge" href="?page=challenge">Челлендж лист</a>
+                    <a id="btn-future" href="?page=future">Будущий лист</a>
+                    <a id="btn-send" href="?page=send">Отправить</a>
+                    <a id="btn-rules" href="?page=rules">Правила</a>
                     <a href="#">Подробнее</a>
                 </div>
             </div>
@@ -31,39 +31,253 @@
     </header>
 
     <main class="container">
-        <!-- Stats Bar -->
-        <div class="stats-bar">
-            <div class="stat">
-                <div class="stat-value" id="api-stat-total">N/A</div>
-                <div class="stat-label">Всего Уровней</div>
+        <!-- Lists -->
+        <div id="page-lists" style="display: none;">
+            <div class="stats-bar">
+                <div class="stat">
+                    <div class="stat-value" id="api-stat-total">N/A</div>
+                    <div class="stat-label">Всего Уровней</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="api-stat-downloads">N/A</div>
+                    <div class="stat-label">Всего Скачиваний</div>
+                </div>
+                <!-- <div class="filter-bar">
+                    <button class="filter-btn active">Все</button>
+                    <button class="filter-btn">Экстримы</button>
+                    <button class="filter-btn">Инсейн</button>
+                    <button class="filter-btn">Хард</button>
+                </div> -->
             </div>
-            <div class="stat">
-                <div class="stat-value" id="api-stat-downloads">N/A</div>
-                <div class="stat-label">Всего Скачиваний</div>
+
+            <div class="table-wrapper">
+                <table class="demon-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Уровень</th>
+                            <th>Сложность</th>
+                            <th>Видео</th>
+                            <th>Айди</th>
+                            <th>Скачиваний / Лайков</th>
+                        </tr>
+                    </thead>
+                    <tbody id="api-list">
+                    </tbody>
+                </table>
             </div>
-            <!-- <div class="filter-bar">
-                <button class="filter-btn active">Все</button>
-                <button class="filter-btn">Экстримы</button>
-                <button class="filter-btn">Инсейн</button>
-                <button class="filter-btn">Хард</button>
-            </div> -->
         </div>
 
-        <!-- Demon Table -->
-        <div class="table-wrapper">
-            <table class="demon-table">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Уровень</th>
-                        <th>Сложность</th>
-                        <th>Видео</th>
-                        <th>Скачиваний</th>
-                    </tr>
-                </thead>
-                <tbody id="api-list">
-                </tbody>
-            </table>
+        <!-- Send -->
+        <div id="page-send" style="display: none;">
+            <div class="sheader">
+                <h1>Отправка вашего уровня</h1>
+                <p>Отправьте короткое сообщение о добавлении вашего уровня в Демонлист</p>
+            </div>
+
+            <div class="info-banner">
+                <div class="icon">⚠️</div>
+                <div class="text">
+                    <strong>Перед отправкой убедитесь:</strong>
+                    <p>Ваш уровень верифнут, у него есть шоукейс, подтверждение о верифе, не нарушает наши правила.</p>
+                </div>
+            </div>
+
+            <h2 style="margin-bottom: 20px; font-size: 20px;">Наши модераторы</h2>
+            <div class="mods-grid" id="modsGrid"></div>
+        </div>
+
+        <!-- Rules -->
+        <div id="page-rules" style="display: none;">
+            <div class="rules-container">
+                <div class="rules-header">
+                    <h1>Правила Демонлиста</h1>
+                    <p>Ознакомьтесь с правилами перед отправкой уровня</p>
+                </div>
+
+                <div class="rules-grid">
+                    <!-- Rule 1 -->
+                    <div class="rule-card">
+                        <div class="rule-header">
+                            <div class="rule-icon">🎮</div>
+                            <div class="rule-title">
+                                <h3>Требования к уровню</h3>
+                                <span>Правило #1</span>
+                            </div>
+                        </div>
+                        <div class="rule-body">
+                            <p>Уровень должен соответствовать следующим критериям:</p>
+                            <ul class="rule-list">
+                                <li>Уровень должен быть полностью завершён и опубликован</li>
+                                <li>Уровень должен иметь сложность Demon или выше</li>
+                                <li>Уровень должен быть оригинальным (не копия)</li>
+                                <li>Длина уровня: от XL и выше</li>
+                            </ul>
+                            <div class="rule-badge">✓ Вериф обязателен</div>
+                        </div>
+                    </div>
+
+                    <div class="rule-card">
+                        <div class="rule-header">
+                            <div class="rule-icon">🎥</div>
+                            <div class="rule-title">
+                                <h3>Видео-доказательство</h3>
+                                <span>Правило #2</span>
+                            </div>
+                        </div>
+                        <div class="rule-body">
+                            <p>Для добавления уровня необходимо видео:</p>
+                            <ul class="rule-list">
+                                <li>Полное прохождение уровня от начала до конца</li>
+                                <li>Видео должно быть без монтажа и ускорений</li>
+                                <li>Качество видео не менее 720p</li>
+                                <li>Показать настройки FPS (если выше 60)</li>
+                            </ul>
+                            <div class="rule-badge">📹 YouTube</div>
+                        </div>
+                    </div>
+
+                    <div class="rule-card">
+                        <div class="rule-header">
+                            <div class="rule-icon">👑</div>
+                            <div class="rule-title">
+                                <h3>Права создателя</h3>
+                                <span>Правило #3</span>
+                            </div>
+                        </div>
+                        <div class="rule-body">
+                            <p>Уважайте труд создателей уровней:</p>
+                            <ul class="rule-list">
+                                <li>Указывайте всех соавторов уровня</li>
+                                <li>Не копируйте чужие уровни без разрешения</li>
+                                <li>Не выдавайте чужой уровень за свой</li>
+                                <li>При ремейке указывайте оригинального автора</li>
+                            </ul>
+                            <div class="rule-badge">© Указывайте авторов</div>
+                        </div>
+                    </div>
+
+                    <div class="rule-card">
+                        <div class="rule-header">
+                            <div class="rule-icon">📊</div>
+                            <div class="rule-title">
+                                <h3>Оценивание сложности</h3>
+                                <span>Правило #4</span>
+                            </div>
+                        </div>
+                        <div class="rule-body">
+                            <p>Система определения сложности:</p>
+                            <ul class="rule-list">
+                                <li>Сложность определяется модераторами</li>
+                                <li>Учитывается геймплей и техническая сложность</li>
+                                <li>Апелляции принимаются в течение 7 дней</li>
+                                <li>Сложность может быть изменена после ре-оценки</li>
+                            </ul>
+                            <div class="rule-badge">⚖️ Модераторы могут изменить мнение</div>
+                        </div>
+                    </div>
+
+                    <div class="rule-card">
+                        <div class="rule-header">
+                            <div class="rule-icon">🚫</div>
+                            <div class="rule-title">
+                                <h3>Запрещённый контент</h3>
+                                <span>Правило #5</span>
+                            </div>
+                        </div>
+                        <div class="rule-body">
+                            <p>Следующий контент запрещён:</p>
+                            <ul class="rule-list">
+                                <li>NSFW / откровенные сцены</li>
+                                <li>Оскорбительные триггеры и сообщения</li>
+                                <li>Политическая пропаганда</li>
+                                <li>Скрытые объекты / невидимые препятствия</li>
+                            </ul>
+                            <div class="rule-badge">⛔ Нарушения недопустимы</div>
+                        </div>
+                    </div>
+
+                    <div class="rule-card">
+                        <div class="rule-header">
+                            <div class="rule-icon">🕒</div>
+                            <div class="rule-title">
+                                <h3>Активность уровня</h3>
+                                <span>Правило #6</span>
+                            </div>
+                        </div>
+                        <div class="rule-body">
+                            <p>Поддержание актуальности списка:</p>
+                            <ul class="rule-list">
+                                <li>Уровни проверяются каждые 3 месяца</li>
+                                <li>Неактуальные уровни могут быть удалены</li>
+                                <li>Видео должно быть доступно всегда</li>
+                                <li>Уровень должен быть проходим в текущей версии</li>
+                            </ul>
+                            <div class="rule-badge">🔄 Регулярные проверки</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <h2>📋 <span>Процесс добавления уровня</span></h2>
+                    <p>Чтобы предложить уровень для демонлиста, свяжитесь с любым модератором в Telegram. Придерживайтесь следующего формата сообщения:</p>
+                    
+                    <div class="guidance-grid">
+                        <div class="guidance-item">
+                            <strong>🎮 Название уровня</strong>
+                            <p>Укажите точное название уровня и ID</p>
+                        </div>
+                        <div class="guidance-item">
+                            <strong>🎥 Ссылка на видео</strong>
+                            <p>YouTube видео с полным прохождением</p>
+                        </div>
+                        <div class="guidance-item">
+                            <strong>👤 Автор(ы)</strong>
+                            <p>Укажите всех создателей уровня</p>
+                        </div>
+                        <div class="guidance-item">
+                            <strong>📝 Дополнительно</strong>
+                            <p>Любая полезная информация о уровне</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <h2>⚠️ <span>Нарушения и наказания</span></h2>
+                    <table class="penalty-table">
+                        <thead>
+                            <tr>
+                                <th>Нарушение</th>
+                                <th>Наказание</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Неверная сложность (намеренно)</td><td>Предупреждение + отказ</td></tr>
+                            <tr><td>Фальшивое видео/чит</td><td>Бан на 30 дней</td></tr>
+                            <tr><td>Плагиат уровня</td><td>Перманентный бан</td></tr>
+                            <tr><td>Оскорбление модераторов</td><td>Бан на 14 дней</td></tr>
+                            <tr><td>Спам заявок</td><td>Бан на 7 дней</td></tr>
+                            <tr><td>NSFW / запрещённый контент</td><td>Моментальный перманентный бан</td></tr>
+                        </tbody>
+                    </table>
+                    <p style="margin-top: 20px; font-size: 13px; color: #8e92a3;">📌 Все решения модераторов могут быть оспорены в течение 7 дней после вынесения вердикта.</p>
+                </div>
+
+                <div class="info-section">
+                    <h2>📨 <span>Куда отправлять заявку?</span></h2>
+                    <p>Свяжитесь с любым модератором через Telegram. Список активных модераторов доступен <a href="send.html" style="color: #ffd93d;">здесь</a> или на странице "Отправить".</p>
+                    <div class="guidance-grid">
+                        <div class="guidance-item">
+                            <strong>💬 Telegram</strong>
+                            <p>@ysinzz</p>
+                        </div>
+                        <div class="guidance-item">
+                            <strong>📧 Discord (альтернатива)</strong>
+                            <p>скоро</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Footer -->
@@ -73,6 +287,125 @@
         </footer>
     </main>
 
+    <script>
+        function setShowCategory(string) {
+            document.getElementById('api-curlist').textContent = string;
+        }
+        function showElementId(string) {
+            const elem = document.getElementById(string);
+            if (elem !== undefined && elem !== null) {
+                elem.style.display = '';
+            }
+        }
+        function copyId(btn, id) {
+            const originalText = btn.innerText;
+            navigator.clipboard.writeText(id.toString());
+            btn.innerText = "Скопировано";
+            if (originalText === "Скопировано") {
+                return;
+            }
+            setTimeout(() => {
+                btn.innerText = originalText;
+            }, 2000);
+        }
+        function setTitle(string) {
+            document.getElementById('title').textContent = string;
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const page = (urlParams.get('page') !== undefined && urlParams.get('page') !== null) ? urlParams.get('page') : 'demonlist';
+
+        const demonlistButton = document.getElementById('btn-demonlist');
+        demonlistButton.classList = page === 'demonlist' ? 'nav-active' : '';
+        if (page === 'demonlist') setShowCategory('_');
+
+        const challengeButton = document.getElementById('btn-challenge');
+        challengeButton.classList = page === 'challenge' ? 'nav-active' : '';
+        if (page === 'challenge') {
+            setShowCategory('challenge');
+            setTitle("Челлендж Лист");
+        }
+
+        const futureButton = document.getElementById('btn-future');
+        futureButton.classList = page === 'future' ? 'nav-active' : '';
+        if (page === 'future') {
+            setShowCategory('future');
+            setTitle("Будущий Лист");
+        }
+
+        if (page === 'demonlist' || page === 'challenge' || page === 'future') {
+            showElementId('page-lists');
+        }
+
+        const sendButton = document.getElementById('btn-send');
+        sendButton.classList = page === 'send' ? 'nav-active' : '';
+        if (page === 'send') {
+            showElementId('page-send');
+            setTitle("Отправка Уровня");
+        }
+
+        const rulesButton = document.getElementById('btn-rules');
+        rulesButton.classList = page === 'rules' ? 'nav-active' : '';
+        if (page === 'rules') {
+            showElementId('page-rules');
+            setTitle("Правила");
+        }
+    </script>
+    <script>
+        const moderators = [
+            {
+                name: "ysinzz",
+                role: "Главный Модератор",
+                telegram: "@ysinzz",
+                telegramLink: "https://t.me/ysinzz",
+                languages: ["Английский", "Русский"],
+                avatar: "🐧",
+                status: "онлайн"
+            }
+        ];
+
+        function loadModerators() {
+            const grid = document.getElementById('modsGrid');
+            
+            moderators.forEach(mod => {
+                const statusColor = mod.status === 'онлайн' ? '#4caf50' : (mod.status === 'busy' ? '#ff9800' : '#9e9e9e');
+                const statusText = mod.status === 'онлайн' ? '● На связи' : (mod.status === 'busy' ? '● Busy' : '● Offline');
+                
+                const card = document.createElement('div');
+                card.className = 'mod-card';
+                card.innerHTML = `
+                    <div class="mod-header">
+                        <div class="mod-avatar">${mod.avatar}</div>
+                        <div class="mod-info">
+                            <div class="mod-name">${mod.name}</div>
+                            <div class="mod-role">${mod.role}</div>
+                            <div class="mod-badge" style="color: ${statusColor}">${statusText}</div>
+                        </div>
+                    </div>
+                    <div class="mod-body">
+                        <div class="contact-item">
+                            <div class="contact-icon">📱</div>
+                            <div class="contact-details">
+                                <div class="contact-label">Telegram</div>
+                                <div class="contact-value">${mod.telegram}</div>
+                            </div>
+                            <a href="${mod.telegramLink}" target="_blank" class="contact-btn">Отправить</a>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">🌐</div>
+                            <div class="contact-details">
+                                <div class="contact-label">Языки</div>
+                                <div class="contact-value">${mod.languages.join(' • ')}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        loadModerators();
+    </script>
     <script type="module" src="bundle.js"></script>
 </body>
 </html>
