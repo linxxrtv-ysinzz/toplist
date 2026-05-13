@@ -92944,7 +92944,7 @@ const { api } = client;
         CLevel = await client.api.levels.getById({ levelID: CLevelId })
         CUser = await client.api.users.getById(CLevel['creatorUserID']);
       }
-      const CUserNick = CUser['nick'];
+      const CUserNick = (CLevel_Author !== undefined && CLevel_Author !== null) ? CLevel_Author : CUser['nick'];
       const CTitle = CLevel['name'];
       const CDemonDifficulty = CLevel['demonDiff'];
       const CDownloads = CLevel['downloads'];
