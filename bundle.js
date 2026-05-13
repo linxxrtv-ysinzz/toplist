@@ -92908,6 +92908,8 @@ const client = new GDClient({
 });
 const { api } = client;
 
+const API_LINK = 'https://demo.opengist.io/ysinzz/3044ab01526043dc86066b7ee888c79b/raw/HEAD/toplist.json';
+
 // data
 (async() => {
   // fake info
@@ -92916,11 +92918,10 @@ const { api } = client;
   client.gjp = "dummy";
   client.mustLogin = false;
 
-  const response = await fetch('https://demo.opengist.io/ysinzz/3044ab01526043dc86066b7ee888c79b/raw/HEAD/toplist.json');
+  const response = await fetch(API_LINK);
   const data = await response.json();
 
   let total = 0;
-  let totalDemonlist = 0;
   let totalDownloads = 0;
 
   const currentList = document.getElementById('api-curlist').textContent;
@@ -92931,7 +92932,6 @@ const { api } = client;
     console.log(category['levels']);
     for (const element of category['levels']) {
       total = total + 1;
-      totalDemonlist = totalDemonlist + 1;
 
       // level
       const CLevelId = element['id'];
@@ -92997,7 +92997,6 @@ const { api } = client;
 
   // api
   document.getElementById('api-stat-total').textContent = total.toString();
-  document.getElementById('api-stat-demonlist').textContent = totalDemonlist.toString();
   document.getElementById('api-stat-downloads').textContent = totalDownloads.toString();
 })();
 },{"./API/api":295}]},{},[490]);
