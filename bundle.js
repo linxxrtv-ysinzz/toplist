@@ -92977,6 +92977,8 @@ const API_LINK = 'https://demo.opengist.io/ysinzz/3044ab01526043dc86066b7ee888c7
       const totalId = (CLevelId === undefined) ? 'N/A' : CLevelId.toString();
       const totalIdId = (CLevelId === undefined) ? -1 : CLevelId;
       const youtubeText = (element['youtube'] === '-1') ? "Отсутствует" : "На YouTube";
+      const lastTwoTd = (document.getElementById('tr-r1').style.display !== 'none') ? `<td><button onclick="copyId(this, ${totalIdId})" class="id-btn">${totalId}</button></td>
+                          <td class="points">${CDownloads.toString()} / ${CLikes.toString()}</td>` : '';
       tr.innerHTML = `<td class="rank">#${total.toString()}</td>
                           <td>
                               <div class="level-info">
@@ -92989,8 +92991,7 @@ const API_LINK = 'https://demo.opengist.io/ysinzz/3044ab01526043dc86066b7ee888c7
                           </td>
                           <td><span class="difficulty difficulty-${difficultyClass}">${difficultyName}</span></td>
                           <td><a href="${element['youtube']}" class="video-btn">▶ ${youtubeText}</a></td>
-                          <td><button onclick="copyId(this, ${totalIdId})" class="id-btn">${totalId}</button></td>
-                          <td class="points">${CDownloads.toString()} / ${CLikes.toString()}</td>`;~
+                          ${lastTwoTd}`;~
       list.appendChild(tr);
     };
   }

@@ -58,8 +58,8 @@
                             <th>Уровень</th>
                             <th>Сложность</th>
                             <th>Видео</th>
-                            <th>Айди</th>
-                            <th>Скачиваний / Лайков</th>
+                            <th id="tr-r1">Айди</th>
+                            <th id="tr-r2">Скачиваний / Лайков</th>
                         </tr>
                     </thead>
                     <tbody id="api-list">
@@ -328,6 +328,8 @@
         if (page === 'future') {
             setShowCategory('future');
             setTitle("Будущий Лист");
+            document.getElementById('tr-r1').style.display = 'none';
+            document.getElementById('tr-r2').style.display = 'none';
         }
 
         if (page === 'demonlist' || page === 'challenge' || page === 'future') {
