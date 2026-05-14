@@ -92941,12 +92941,12 @@ const API_LINK = 'https://demo.opengist.io/ysinzz/3044ab01526043dc86066b7ee888c7
       let CLevel = {"name": CLevel_Title, "demonDiff": CLevel_Difficulty, "downloads": -1, "likes": -1};
       let CUser = {"nick": CLevel_Author};
       if (CLevelId !== undefined && CLevelId !== null) {
-        CLevel = await client.api.levels.getById({ levelID: CLevelId })
+        CLevel = await client.api.levels.getById({ levelID: CLevelId });
         CUser = await client.api.users.getById(CLevel['creatorUserID']);
       }
       const CUserNick = (CLevel_Author !== undefined && CLevel_Author !== null) ? CLevel_Author : CUser['nick'];
+      const CDemonDifficulty = (CLevel_Difficulty !== undefined && CLevel_Difficulty !== null) ? CLevel_Difficulty : CUser['demonDiff'];
       const CTitle = CLevel['name'];
-      const CDemonDifficulty = CLevel['demonDiff'];
       const CDownloads = CLevel['downloads'];
       const CLikes = CLevel['likes'];
 
