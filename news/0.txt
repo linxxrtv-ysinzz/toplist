@@ -1,5 +1,6 @@
 category="📊 Рейтинг"
 icon="👑"
+image="🌊👑"
 author="ysinzz"
 date="13 мая 2026"
 title="Изменения в топ-10: три новых уровня"
