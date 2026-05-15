@@ -8,6 +8,7 @@
 </head>
 <body>
     <div style="display: none;" id="api-curlist"></div>
+    <div style="display: none;" id="api-done"></div>
 
     <!-- Header -->
     <header class="header">
@@ -22,9 +23,9 @@
                     <a id="btn-demonlist" href="?page=demonlist">Демонлист</a>
                     <a id="btn-challenge" href="?page=challenge">Челлендж лист</a>
                     <a id="btn-future" href="?page=future">Будущий лист</a>
-                    <a id="btn-send" href="?page=send">Отправить</a>
+                    <a id="btn-insides" href="?page=insides">Инсайды</a>
+                    <a id="btn-send" href="?page=send">Добавить свой</a>
                     <a id="btn-rules" href="?page=rules">Правила</a>
-                    <a href="#">Подробнее</a>
                 </div>
             </div>
         </div>
@@ -277,6 +278,79 @@
             </div>
         </div>
 
+        <div id="page-insides" style="display: none;">
+            <div class="insides-container">
+                <div class="hero">
+                    <h1>Инсайды</h1>
+                    <p>Новости, обновления и события демонлиста</p>
+                </div>
+
+                <div class="two-columns">
+                    <div>
+                        <div class="section-title">
+                            📰 Последние новости
+                            <a href="#" class="view-all">Все новости →</a>
+                        </div>
+                        
+                        <div class="news-grid" id="api-insides-list"></div>
+                    </div>
+
+                    <div class="second-column">
+                        <div class="discord-widget">
+                            <div class="discord-icon">🎇</div>
+                            <h3>Будь в курсе</h3>
+                            <p>Не пропусти любую новость - подключи Telegram-бота</p>
+                            <a href="#" class="discord-btn telegram-btn unwork-btn">Подключить</a>
+                        </div>
+
+                        <div class="discord-widget">
+                            <div class="discord-icon">💬</div>
+                            <h3>Присоединяйся к Discord</h3>
+                            <p>Обсуждай новости с сообществом</p>
+                            <a href="#" class="discord-btn unwork-btn">Присоединиться</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="page-inside" style="display: none;">
+            <div class="article-container">
+                <a href="?page=insides" class="back-button">
+                    ← Назад к новостям
+                </a>
+
+                <div class="article-header">
+                    <div class="article-category" id="api-inside-category"></div>
+                    <h1 class="article-title" id="api-inside-title"></h1>
+                    <div class="article-meta">
+                        <div class="meta-item">
+                            <span class="emoji">👤</span>
+                            <span>Автор: <strong id="api-inside-author"></strong></span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="emoji">📅</span>
+                            <span id="api-inside-date"></span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="emoji">⏱️</span>
+                            <span>Время чтения: <strong id="api-inside-readtime"></strong></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="article-image" id="api-inside-image"></div>
+                <div class="article-content" id="api-inside-content"></div>
+
+                <div class="share-buttons">
+                    <a href="#" class="share-btn">📘 Поделиться</a>
+                    <a href="#" class="share-btn">🐦 Твитнуть</a>
+                    <a href="#" class="share-btn">💬 Telegram</a>
+                    <a href="#" class="share-btn">🔗 Копировать ссылку</a>
+                </div>
+            </div>
+        </div>
+
         <!-- Footer -->
         <footer class="footer">
             <p>⚡ Toplist • Inspired by PointerCrate • Not affiliated with RobTop Games</p>
@@ -349,6 +423,18 @@
             showElementId('page-rules');
             setTitle("Правила");
         }
+
+        const insidesButton = document.getElementById('btn-insides');
+        insidesButton.classList = page === 'insides' ? 'nav-active' : '';
+        if (page === 'insides') {
+            showElementId('page-insides');
+            setTitle("Инсайды");
+        }
+
+        if (page.startsWith('inside-')) {
+            showElementId('page-inside');
+            setTitle("Артикль");
+        }
     </script>
     <script>
         const moderators = [
@@ -406,5 +492,44 @@
         loadModerators();
     </script>
     <script type="module" src="bundle.js"></script>
+    <script>
+        function reverse(selector) {
+            const container = document.querySelector(selector);
+            if (!container) {
+                console.warn(`Container "${selector}" not found`);
+                return;
+            }
+            const children = Array.from(container.children);
+            children.reverse().forEach(child => container.appendChild(child));
+            console.log(`Reversed ${children.length} children`);
+        }
+
+        function waitForDone(maxAttempts = 50, currentAttempt = 0) {
+            if (currentAttempt >= maxAttempts) {
+                console.warn('Max attempts reached, stopping wait');
+                return;
+            }
+            
+            const doneElement = document.getElementById('api-done');
+            
+            if (!doneElement) {
+                console.warn('Element #api-done not found, retrying...');
+                setTimeout(() => waitForDone(maxAttempts, currentAttempt + 1), 100);
+                return;
+            }
+            
+            const content = doneElement.textContent || '';
+            
+            if (content.includes('yes')) {
+                console.log('Condition met, reversing...');
+                reverse('#api-insides-list');
+            } else {
+                console.log(`Waiting... (attempt ${currentAttempt + 1}/${maxAttempts})`);
+                setTimeout(() => waitForDone(maxAttempts, currentAttempt + 1), 100);
+            }
+        }
+
+        waitForDone();
+    </script>
 </body>
 </html>

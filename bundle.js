@@ -92910,6 +92910,65 @@ const { api } = client;
 
 const API_LINK = 'https://demo.opengist.io/ysinzz/3044ab01526043dc86066b7ee888c79b/raw/HEAD/toplist.json';
 
+function parseArticl(insideInfo) {
+  const lines = insideInfo.split('\n');
+  let textLines = "";
+  let needToParse = true;
+  //
+  let category = "";
+  let icon = "";
+  let author = "";
+  let date = "";
+  let title = "";
+  let small = "";
+  let image = "";
+  let readtime = "";
+  lines.forEach(line => {
+    if (!needToParse) return;
+    if (line === "///") {
+      textLines = insideInfo.split('///')[1];
+      needToParse = false;
+    }
+    if (line.includes('=')) {
+      const spl = line.split('=');
+      const key = spl[0];
+      const value = spl[1].replace('"', '').replace('"', '');
+      if (key === 'category') { category = value; }
+      if (key === 'icon') { icon = value; }
+      if (key === 'author') { author = value; }
+      if (key === 'date') { date = value; }
+      if (key === 'title') { title = value; }
+      if (key === 'small') { small = value; }
+      if (key === 'image') { image = value; }
+      if (key === 'readtime') { readtime = value; }
+    }
+  });
+  return {
+    'textLines': textLines,
+    'category': category,
+    'icon': icon,
+    'author': author,
+    'date': date,
+    'title': title,
+    'small': small,
+    'image': image,
+    'readtime': readtime,
+  };
+}
+
+function isValidArticl(insideInfo) {
+  const textLines = insideInfo['textLines'];
+  const category = insideInfo['category'];
+  const icon = insideInfo['icon'];
+  const author = insideInfo['author'];
+  const date = insideInfo['date'];
+  const title = insideInfo['title'];
+  const small = insideInfo['small'];
+  const image = insideInfo['image'];
+  const readtime = insideInfo['readtime'];
+  return (textLines !== "" && category !== "" && icon !== "" && author !== "" && date !== "" && title !== "" && small !== "" && image !== "" && readtime !== "")
+}
+
 // data
 (async() => {
   // fake info
@@ -92918,6 +92977,90 @@ const API_LINK = 'https://demo.opengist.io/ysinzz/3044ab01526043dc86066b7ee888c7
   client.gjp = "dummy";
   client.mustLogin = false;
 
+  const urlParams = new URLSearchParams(window.location.search);
+  const page = (urlParams.get('page') !== undefined && urlParams.get('page') !== null) ? urlParams.get('page') : 'demonlist';
+
+  ///// Opened inside
+  if (page.startsWith('inside-')) {
+    const insideId = page.replace('inside-', '');
+    let insideInfo = null;
+    try {
+      insideInfo = await (await fetch(`https://raw.githubusercontent.com/linxxrtv-ysinzz/toplist/refs/heads/main/news/${insideId}.txt`)).text();
+    } catch (e) {}
+    if (insideInfo !== null) {
+      const dict = parseArticl(insideInfo);
+      //
+      const textLines = dict['textLines'];
+      const category = dict['category'];
+      const icon = dict['icon'];
+      const author = dict['author'];
+      const date = dict['date'];
+      const title = dict['title'];
+      const small = dict['small'];
+      const image = dict['image'];
+      const readtime = dict['readtime'];
+      if (isValidArticl(insideInfo)) {
+        document.getElementById('api-inside-content').innerHTML = textLines;
+        document.getElementById('api-inside-image').textContent = image;
+        document.getElementById('api-inside-title').textContent = title;
+        document.getElementById('api-inside-author').textContent = author;
+        document.getElementById('api-inside-date').textContent = date;
+        document.getElementById('api-inside-readtime').textContent = readtime;
+        document.getElementById('api-inside-category').textContent = category;
+      }
+    }
+  }
+
+  ///// Inside list
+  if (page === 'insides') {
+    document.getElementById('api-insides-list').replaceChildren();
+    let needToParse = true;
+    let index = -1;
+    let found = 0;
+    while (needToParse) {
+      index = index + 1;
+      try {
+        const response = await fetch(`https://raw.githubusercontent.com/linxxrtv-ysinzz/toplist/refs/heads/main/news/${index.toString()}.txt`);
+        if (response.status !== 200 || found >= 7 || response.status === 404 || !response.ok) {
+          needToParse = false;
+          break;
+        }
+        found += 1;
+        const insideInfo = await response.text();
+        const dict = parseArticl(insideInfo);
+        //
+        const category = dict['category'];
+        const icon = dict['icon'];
+        const author = dict['author'];
+        const date = dict['date'];
+        const title = dict['title'];
+        const small = dict['small'];
+        const readtime = dict['readtime'];
+        if (isValidArticl(insideInfo)) {
+          const articlList = document.getElementById('api-insides-list');
+          let element = document.createElement('div');
+          element.classList = 'news-card';
+          element.innerHTML = `<div class="news-image">${icon}</div>
+                              <div class="news-content">
+                                  <span class="news-category">${category}</span>
+                                  <div class="news-title">${title}</div>
+                                  <div class="news-meta">
+                                      <span>👤 ${author}</span>
+                                      <span>📅 ${date}</span>
+                                      <span>⌚ ${readtime}</span>
+                                  </div>
+                                  <div class="news-excerpt">${small}</div>
+                                  <a href="?page=inside-${index}" class="news-link">Читать →</a>
+                              </div>`;
+          articlList.appendChild(element);
+        }
+      } catch (e) {
+        needToParse = false;
+      }
+    }
+  }
+
+  ///// Lists
   const response = await fetch(API_LINK);
   const data = await response.json();
 
@@ -92925,7 +93068,6 @@ const API_LINK = 'https://demo.opengist.io/ysinzz/3044ab01526043dc86066b7ee888c7
   let totalDownloads = 0;
 
   const currentList = document.getElementById('api-curlist').textContent;
-
   for (const category of data['categories']) {
     if (category['id'] != currentList) { continue; }
 
@@ -92999,5 +93141,8 @@ const API_LINK = 'https://demo.opengist.io/ysinzz/3044ab01526043dc86066b7ee888c7
   // api
   document.getElementById('api-stat-total').textContent = total.toString();
   document.getElementById('api-stat-downloads').textContent = totalDownloads.toString();
+
+  document.getElementById('api-done').textContent = 'yes';
+  console.log("Script executed!");
 })();
 },{"./API/api":295}]},{},[490]);
