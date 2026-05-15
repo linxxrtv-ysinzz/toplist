@@ -3,6 +3,7 @@ icon="👑"
 image="🌊👑"
 author="ysinzz"
 date="13 мая 2026"
+readtime="5 мин"
 title="Изменения в топ-10: три новых уровня"
 small="Acropolis, Bloodbath и Sakupen Circles вошли в десятку лучших. Предыдущие лидеры сместились на позиции ниже..."
 ///
